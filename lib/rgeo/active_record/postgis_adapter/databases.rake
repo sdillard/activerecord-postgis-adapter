@@ -54,7 +54,7 @@ def create_database(config_)
         conn_ = ::ActiveRecord::Base.connection
         search_path_ = config_["schema_search_path"].to_s.strip
         search_path_ = search_path_.split(",").map{ |sp_| sp_.strip }
-        if search_path_.include?('postgis')
+        if search_path_.include?('postgis') || (Rails.env == "test" && config_['test_postgis_schema'] == true)
           conn_.execute('CREATE SCHEMA postgis')
           conn_.execute('SET search_path TO postgis')
         end
